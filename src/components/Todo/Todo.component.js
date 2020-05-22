@@ -1,6 +1,8 @@
 import React from 'react';
 
 const Todo = ({ onClick, completed, text }) => {
+	console.log(text);
+
 	return (
 		<li
 			onClick={onClick}

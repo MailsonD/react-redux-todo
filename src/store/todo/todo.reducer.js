@@ -15,7 +15,10 @@ const { SHOW_ALL } = VisibilityFilters;
 
 const initialState = {
 	visibilityFilter: SHOW_ALL,
-	todos: [],
+	todos: [
+		{ text: 'Aprender Redux', completed: false, id: 0 },
+		{ text: 'Aprender Flexbox', completed: false, id: 1 },
+	],
 };
 
 /*
@@ -40,20 +43,17 @@ export const visibilityFilter = createReducer(
  */
 
 function addTodo(state, action) {
-	return {
+	return [
 		...state,
-		todos: [
-			...state.todos,
-			{ text: action.text, completed: false },
-		],
-	};
+		{ text: action.text, completed: false, id: action.id },
+	];
 }
 
 function toggleTodo(state, action) {
 	return {
 		...state,
 		todos: state.todos.map((todo, index) => {
-			return index === action.index
+			return index === action.id
 				? { ...todo, completed: !todo.completed }
 				: todo;
 		}),
@@ -64,11 +64,11 @@ function removeTodo(state, action) {
 	return {
 		...state,
 		todos: state.todos.filter((todo, index) => {
-			return index !== action.index;
+			return index !== action.id;
 		}),
 	};
 }
 
 function setVisibilityFilter(state, action) {
-	return { ...state, visibilityFilter: action.filter };
+	return action.filter;
 }

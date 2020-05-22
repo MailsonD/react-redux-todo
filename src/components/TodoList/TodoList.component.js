@@ -1,12 +1,15 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import Todo from '../Todo/Todo.component';
 
-const TodoList = ({ todos, onTodoClick }) => {
+const TodoList = ({ onTodoClick }) => {
+	const todos = useSelector((state) => state.todos);
+
 	return (
 		<ul>
-			{todos.map((todo, index) => (
+			{todos.map((todo) => (
 				<Todo
-					key={index}
+					key={todo.id}
 					{...todo}
 					onClick={() => onTodoClick(todo.id)}
 				/>
