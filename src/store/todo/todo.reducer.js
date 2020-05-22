@@ -1,3 +1,4 @@
+import { createReducer } from '../util/create-reducer';
 import {
 	SET_VISIBILITY_FILTER,
 	ADD_TODO,
@@ -6,35 +7,39 @@ import {
 	VisibilityFilters,
 } from './todo.actions';
 
+const { SHOW_ALL } = VisibilityFilters;
+
+/*
+ * DEFINES THE INITIAL STATE
+ */
+
 const initialState = {
-	visibilityFilter: VisibilityFilters.SHOW_ALL,
+	visibilityFilter: SHOW_ALL,
 	todos: [],
 };
 
-function todoApp(state = initialState, action) {
-	switch (action.type) {
-		case SET_VISIBILITY_FILTER:
-			return handleSetVisibilityFilter(state, action);
+/*
+ * CREATE THE REDUCERS
+ */
 
-		case ADD_TODO:
-			return handleAddTodo(state, action);
+export const todos = createReducer(initialState.todos, {
+	[ADD_TODO]: addTodo,
+	[TOGGLE_TODO]: toggleTodo,
+	[REMOVE_TODO]: removeTodo,
+});
 
-		case TOGGLE_TODO:
-			return handleToggleTodo(state, action);
-
-		case REMOVE_TODO:
-			return handleRemoveTodo(state, action);
-
-		default:
-			return state;
+export const visibilityFilter = createReducer(
+	initialState.visibilityFilter,
+	{
+		[SET_VISIBILITY_FILTER]: setVisibilityFilter,
 	}
-}
+);
 
-function handleSetVisibilityFilter(state, action) {
-	return { ...state, visibilityFilter: action.filter };
-}
+/*
+ * HANDLERS FOR THE ACTIONS
+ */
 
-function handleAddTodo(state, action) {
+function addTodo(state, action) {
 	return {
 		...state,
 		todos: [
@@ -44,7 +49,7 @@ function handleAddTodo(state, action) {
 	};
 }
 
-function handleToggleTodo(state, action) {
+function toggleTodo(state, action) {
 	return {
 		...state,
 		todos: state.todos.map((todo, index) => {
@@ -55,11 +60,15 @@ function handleToggleTodo(state, action) {
 	};
 }
 
-function handleRemoveTodo(state, action) {
+function removeTodo(state, action) {
 	return {
 		...state,
 		todos: state.todos.filter((todo, index) => {
 			return index !== action.index;
 		}),
 	};
+}
+
+function setVisibilityFilter(state, action) {
+	return { ...state, visibilityFilter: action.filter };
 }
